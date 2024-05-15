@@ -1,10 +1,10 @@
-pipeline{
-    agent any {
-        stages{
-            stage('Clone') {
-                steps{
-                    git 'https://github.com/nguyenvu97/testhwebhook.git'
-                }
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                git 'https://github.com/nguyenvu97/testhwebhook.git'
             }
         }
     }
