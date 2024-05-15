@@ -1,0 +1,86 @@
+ 
+Please Like, Subscribe and comment !! 
+
+    1) create Project folder "gorm_tutorial" 
+    2) Import GORM lib  
+    3) Connect mysql db 
+    4) Lets Create user table into DB
+        - Create struct User 
+    5) Confirm table is created in db 
+    6) Create one record in to users table 
+    7) Update existing user Record 
+    8) Delete User Record 
+
+
+Nxt Vdo : 
+
+- Refactor DB Connection section
+
+
+- Query Records
+
+    - Insert multiple users into users table 
+
+    // Get "First" record ordered by primary key  
+        Syntax : db.First(&user) 
+     Actual Sql:  SELECT * FROM users ORDER BY id LIMIT 1;
+
+    // Get "Last" record, ordered by primary key desc     
+        Syntax : db.Last(&user) 
+     Actual Sql: SELECT * FROM users ORDER BY id DESC LIMIT 1;
+
+    // Get Recording using  "Where" clause
+         db.Where("last_name", "Rajput").First(&user)
+        
+-  gorm.Model : 
+    - Lets change field "Id" to  "gorm.Model" in struct
+    - Run the program & table has new fields
+    - Run program 
+
+ Constrains : 
+ -- unique, primaryKey, foreignKey 
+
+   - Can add more constraints 
+       e.g. email should be unique 
+        `gorm:"unique"`
+
+   - Lets say FirstName is varchar 30 
+        `gorm:"type:VARCHAR(30)"` 
+
+   -  Other example 
+        `gorm:"primaryKey"`
+
+ Create Hooks
+    BeforeSave, BeforeCreate, AfterSave
+    e.g. 
+    func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+          u.UUID = uuid.New()
+            if u.Role == "admin" {
+                return errors.New("invalid role")
+            }
+        return
+    }
+
+
+    - NullString 
+        e.g. Email  cant be null   
+            sql.NullString `gorm:"unique; not null"`
+
+        Email: sql.NullString{
+			String: "John.Doe@testmail.com",
+			Valid:  true,
+		},
+
+
+    - Foreign Keys
+        - Lets create Address struct ( )
+          to create user address table.
+        
+        - Add address mapping to 
+            Address  Address `gorm:"foreignKey:UserId"`
+
+
+    - Many to Many Relations 
+       - Create Book struct, Id & Title  
+       - Will add field books to User struct
+            Books []Book `gorm:"many2many:user_book"`
