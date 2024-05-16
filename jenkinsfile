@@ -9,15 +9,10 @@ pipeline {
         }
         stage('build stage') {
             steps {
-               script {
-                   // Tạo image Docker
-                   docker.build('nguyenvu/golang')
-                   
-                   // Đẩy image đến Docker Registry
-                   docker.withRegistry('https://index.docker.io/v1/', 'docker-hub') {
-                       docker.image('nguyenvu/golang').push()
-                   }
-               }
+               withDockerRegistry(credentialsId: 'docker-hub', url: 'https://index.docker.io/v1/') {
+                sh 'docker builder -t nguyenvu/golang .'
+                sh 'docker push nguyenvu/golang .'
+                }
             }
         }
     }
